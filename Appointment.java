@@ -9,27 +9,28 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long doctorId;
-    private Long patientId;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id") // foreign key
+    private Doctor doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id") // foreign key
+    private Patient patient;
 
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
-
     private String status;
 
-    // Default constructor
     public Appointment() {}
 
-    // Parameterized constructor
-    public Appointment(Long doctorId, Long patientId, LocalDate appointmentDate, LocalTime appointmentTime, String status) {
-        this.doctorId = doctorId;
-        this.patientId = patientId;
+    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime, String status) {
+        this.doctor = doctor;
+        this.patient = patient;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -37,18 +38,18 @@ public class Appointment {
         this.id = id;
     }
 
-    public Long getDoctorId() {
-        return doctorId;
+    public Doctor getDoctor() {
+        return doctor;
     }
-    public void setDoctorId(Long doctorId) {
-        this.doctorId = doctorId;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
-    public Long getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public LocalDate getAppointmentDate() {
