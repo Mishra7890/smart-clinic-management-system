@@ -1,28 +1,45 @@
-// File Name: Doctor.java
+import javax.persistence.*;
+import java.util.List;
 
+@Entity
 public class Doctor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String specialization;
     private String contact;
 
-    // Constructor
-    public Doctor(int id, String name, String specialization, String contact) {
-        this.id = id;
+    // Add the required availableTimes field (example: as a String OR List)
+    // TODO: use correct type as per your need!
+    private String availableTimes;
+
+    // Getters, Setters, Constructors as needed
+
+    public Doctor() {}
+
+    public Doctor(String name, String specialization, String contact, String availableTimes) {
         this.name = name;
         this.specialization = specialization;
         this.contact = contact;
+        this.availableTimes = availableTimes;
     }
 
-    // Getters
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getSpecialization() { return specialization; }
-    public String getContact() { return contact; }
+    // Getters and setters...
 
-    // Setters (optional)
+    public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+
+    public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    public String getSpecialization() { return specialization; }
     public void setSpecialization(String specialization) { this.specialization = specialization; }
-    public void setContact(String contact) { this.contact = contact; }
+
+    public String getContact() { return contact; }
+    public void setContact(String contact) { this.contact = contact; }
+
+    public String getAvailableTimes() { return availableTimes; }
+    public void setAvailableTimes(String availableTimes) { this.availableTimes = availableTimes; }
 }
