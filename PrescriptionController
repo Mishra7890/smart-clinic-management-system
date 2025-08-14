@@ -1,9 +1,9 @@
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/prescriptions")
@@ -11,66 +11,30 @@ import java.util.Optional;
 public class PrescriptionController {
 
     private final PrescriptionRepository prescriptionRepository;
+    private final TokenService tokenService; // Token validation Service
 
     @Autowired
-    public PrescriptionController(PrescriptionRepository prescriptionRepository) {
+    public PrescriptionController(PrescriptionRepository prescriptionRepository, TokenService tokenService) {
         this.prescriptionRepository = prescriptionRepository;
+        this.tokenService = tokenService; // Inject your token validation Service
     }
 
-    // Get all prescriptions
-    @GetMapping
-    public List<Prescription> getAllPrescriptions() {
-        return prescriptionRepository.findAll();
-    }
+    // POST method with token as @PathVariable
+    @PostMapping("/{token}")
+    public ResponseEntity<?> createPrescriptionWithToken(
+            @PathVariable String token,
+            @Valid @RequestBody Prescription prescription) {
 
-    // Get prescription by ID
-    @GetMapping("/{id}")
-    public Prescription getPrescriptionById(@PathVariable Long id) {
-        return prescriptionRepository.findById(id).orElse(null);
-    }
-
-    // Get prescriptions by doctorId (dynamic path)
-    @GetMapping("/doctor/{doctorId}")
-    public List<Prescription> getPrescriptionsByDoctorId(@PathVariable Long doctorId) {
-        return prescriptionRepository.findByDoctor_Id(doctorId);
-        // Note: If your repository method is findByDoctorId() and works, then use that.
-    }
-
-    // Get prescriptions by patientId (dynamic path)
-    @GetMapping("/patient/{patientId}")
-    public List<Prescription> getPrescriptionsByPatientId(@PathVariable Long patientId) {
-        return prescriptionRepository.findByPatient_Id(patientId);
-        // Note: If your repository method is findByPatientId(), then use that.
-    }
-
-    // Create a new prescription (with validation!!)
-    @PostMapping
-    public Prescription createPrescription(@Valid @RequestBody Prescription prescription) {
-        return prescriptionRepository.save(prescription);
-    }
-
-    // Update a prescription (with validation!!)
-    @PutMapping("/{id}")
-    public Prescription updatePrescription(@PathVariable Long id,
-                                           @Valid @RequestBody Prescription prescriptionDetails) {
-        Optional<Prescription> presOpt = prescriptionRepository.findById(id);
-        if (presOpt.isPresent()) {
-            Prescription prescription = presOpt.get();
-            prescription.setDoctor(prescriptionDetails.getDoctor());
-            prescription.setPatient(prescriptionDetails.getPatient());
-            prescription.setDate(prescriptionDetails.getDate());
-            prescription.setMedication(prescriptionDetails.getMedication());
-            prescription.setDosage(prescriptionDetails.getDosage());
-            prescription.setInstructions(prescriptionDetails.getInstructions());
-            return prescriptionRepository.save(prescription);
-        } else {
-            return null;
+        // Token validation (Assignment/demo logic)
+        if (!tokenService.validateToken(token)) {
+            Map<String, String> err = new HashMap<>();
+            err.put("error", "Invalid token");
+            return ResponseEntity.status(401).body(err);
         }
+
+        Prescription savedPrescription = prescriptionRepository.save(prescription);
+        return ResponseEntity.ok(savedPrescription);
     }
 
-    // Delete a prescription
-    @DeleteMapping("/{id}")
-    public void deletePrescription(@PathVariable Long id) {
-        prescriptionRepository.deleteById(id);
-    }
+    // Baaki CRUD endpoints (GET/PUT/DELETE etc.) pehle ki tarah ho sakte hain
 }
