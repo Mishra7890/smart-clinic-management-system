@@ -1,8 +1,7 @@
-// package statement (अगर ज़रूरत हो तो)
-
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 public class Appointment {
@@ -11,6 +10,7 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Correct relational mapping
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
@@ -19,22 +19,24 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    private LocalDate appointmentDate;
-    private LocalTime appointmentTime;
+    @NotNull
+    @Future
+    private LocalDateTime appointmentTime;
+
     private String status;
 
     // Default constructor
     public Appointment() {}
 
-    // Param constructor
-    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, LocalTime appointmentTime, String status) {
+    // Parameterized constructor
+    public Appointment(Doctor doctor, Patient patient, LocalDateTime appointmentTime, String status) {
         this.doctor = doctor;
         this.patient = patient;
-        this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
     }
 
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -44,12 +46,10 @@ public class Appointment {
     public Patient getPatient() { return patient; }
     public void setPatient(Patient patient) { this.patient = patient; }
 
-    public LocalDate getAppointmentDate() { return appointmentDate; }
-    public void setAppointmentDate(LocalDate appointmentDate) { this.appointmentDate = appointmentDate; }
-
-    public LocalTime getAppointmentTime() { return appointmentTime; }
-    public void setAppointmentTime(LocalTime appointmentTime) { this.appointmentTime = appointmentTime; }
+    public LocalDateTime getAppointmentTime() { return appointmentTime; }
+    public void setAppointmentTime(LocalDateTime appointmentTime) { this.appointmentTime = appointmentTime; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 }
+
