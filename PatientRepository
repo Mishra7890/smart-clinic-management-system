@@ -1,13 +1,10 @@
+package com.yourpackage.repository; // 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    // Required: Find by email
     Optional<Patient> findByEmail(String email);
-
-    // Optional: Find by phone number
     Optional<Patient> findByPhoneNumber(String phoneNumber);
-
-    // Optional: Find by email or phone number
     Optional<Patient> findByEmailOrPhoneNumber(String email, String phoneNumber);
 }
