@@ -1,10 +1,13 @@
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/prescriptions")
+@Validated
 public class PrescriptionController {
 
     private final PrescriptionRepository prescriptionRepository;
@@ -26,15 +29,28 @@ public class PrescriptionController {
         return prescriptionRepository.findById(id).orElse(null);
     }
 
-    // Create a new prescription
+    // Get prescriptions by doctorId (dynamic path)
+    @GetMapping("/doctor/{doctorId}")
+    public List<Prescription> getPrescriptionsByDoctorId(@PathVariable Long doctorId) {
+        return prescriptionRepository.findByDoctorId(doctorId);
+    }
+
+    // Get prescriptions by patientId (dynamic path)
+    @GetMapping("/patient/{patientId}")
+    public List<Prescription> getPrescriptionsByPatientId(@PathVariable Long patientId) {
+        return prescriptionRepository.findByPatientId(patientId);
+    }
+
+    // Create a new prescription (with validation)
     @PostMapping
-    public Prescription createPrescription(@RequestBody Prescription prescription) {
+    public Prescription createPrescription(@Valid @RequestBody Prescription prescription) {
         return prescriptionRepository.save(prescription);
     }
 
-    // Update a prescription
+    // Update a prescription (with validation)
     @PutMapping("/{id}")
-    public Prescription updatePrescription(@PathVariable Long id, @RequestBody Prescription prescriptionDetails) {
+    public Prescription updatePrescription(@PathVariable Long id,
+                                           @Valid @RequestBody Prescription prescriptionDetails) {
         Optional<Prescription> presOpt = prescriptionRepository.findById(id);
         if (presOpt.isPresent()) {
             Prescription prescription = presOpt.get();
