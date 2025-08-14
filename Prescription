@@ -1,0 +1,28 @@
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+
+@Entity
+public class Prescription {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @NotNull
+    private Doctor doctor;
+
+    @ManyToOne
+    @NotNull
+    private Patient patient;
+
+    @NotNull
+    private LocalDate date;
+
+    @NotNull
+    private String medication;
+
+    private String dosage;
+    private String instructions;
+    // ... constructor/getter/setter ...
+}
