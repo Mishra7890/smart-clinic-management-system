@@ -1,0 +1,58 @@
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/prescriptions")
+public class PrescriptionController {
+
+    private final PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    public PrescriptionController(PrescriptionRepository prescriptionRepository) {
+        this.prescriptionRepository = prescriptionRepository;
+    }
+
+    // Get all prescriptions
+    @GetMapping
+    public List<Prescription> getAllPrescriptions() {
+        return prescriptionRepository.findAll();
+    }
+
+    // Get prescription by ID
+    @GetMapping("/{id}")
+    public Prescription getPrescriptionById(@PathVariable Long id) {
+        return prescriptionRepository.findById(id).orElse(null);
+    }
+
+    // Create a new prescription
+    @PostMapping
+    public Prescription createPrescription(@RequestBody Prescription prescription) {
+        return prescriptionRepository.save(prescription);
+    }
+
+    // Update a prescription
+    @PutMapping("/{id}")
+    public Prescription updatePrescription(@PathVariable Long id, @RequestBody Prescription prescriptionDetails) {
+        Optional<Prescription> presOpt = prescriptionRepository.findById(id);
+        if (presOpt.isPresent()) {
+            Prescription prescription = presOpt.get();
+            prescription.setDoctor(prescriptionDetails.getDoctor());
+            prescription.setPatient(prescriptionDetails.getPatient());
+            prescription.setDate(prescriptionDetails.getDate());
+            prescription.setMedication(prescriptionDetails.getMedication());
+            prescription.setDosage(prescriptionDetails.getDosage());
+            prescription.setInstructions(prescriptionDetails.getInstructions());
+            return prescriptionRepository.save(prescription);
+        } else {
+            return null;
+        }
+    }
+
+    // Delete a prescription
+    @DeleteMapping("/{id}")
+    public void deletePrescription(@PathVariable Long id) {
+        prescriptionRepository.deleteById(id);
+    }
+}
