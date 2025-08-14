@@ -1,0 +1,20 @@
+import org.springframework.stereotype.Service;
+
+@Service
+public class TokenService2 {
+
+    // Dummy/Assignment token validation logic
+    public boolean validateToken(String token) {
+        // For assignment/demo, always return true
+        return true;
+        // Real-world: Add your proper logic here!
+    }
+
+    // (Optional) If validation for user is needed:
+    /*
+    public boolean validateToken(String token, String user) {
+        // For assignment, always true
+        return true;
+    }
+    */
+}
