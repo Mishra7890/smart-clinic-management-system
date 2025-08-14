@@ -1,0 +1,15 @@
+import javax.persistence.*;
+
+@Entity
+public class Patient {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private String email;        // <-- यह field जरुरी है!
+    private String phoneNumber;  // <-- यह field भी जरुरी है!
+
+    // ... rest fields, getters, setters, etc.
+}
