@@ -32,22 +32,24 @@ public class PrescriptionController {
     // Get prescriptions by doctorId (dynamic path)
     @GetMapping("/doctor/{doctorId}")
     public List<Prescription> getPrescriptionsByDoctorId(@PathVariable Long doctorId) {
-        return prescriptionRepository.findByDoctorId(doctorId);
+        return prescriptionRepository.findByDoctor_Id(doctorId);
+        // Note: If your repository method is findByDoctorId() and works, then use that.
     }
 
     // Get prescriptions by patientId (dynamic path)
     @GetMapping("/patient/{patientId}")
     public List<Prescription> getPrescriptionsByPatientId(@PathVariable Long patientId) {
-        return prescriptionRepository.findByPatientId(patientId);
+        return prescriptionRepository.findByPatient_Id(patientId);
+        // Note: If your repository method is findByPatientId(), then use that.
     }
 
-    // Create a new prescription (with validation)
+    // Create a new prescription (with validation!!)
     @PostMapping
     public Prescription createPrescription(@Valid @RequestBody Prescription prescription) {
         return prescriptionRepository.save(prescription);
     }
 
-    // Update a prescription (with validation)
+    // Update a prescription (with validation!!)
     @PutMapping("/{id}")
     public Prescription updatePrescription(@PathVariable Long id,
                                            @Valid @RequestBody Prescription prescriptionDetails) {
