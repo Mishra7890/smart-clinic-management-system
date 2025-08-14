@@ -1,20 +1,48 @@
 import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Service
-public class TokenService2 {
+public class TokenService {
 
-    // Dummy/Assignment token validation logic
-    public boolean validateToken(String token) {
-        // For assignment/demo, always return true
-        return true;
-        // Real-world: Add your proper logic here!
+    // Secret key for HMAC signing (demo/assignment level! Real project में ज्यादा secure रखें)
+    private static final String SECRET = "smart-clinic-secret-key-for-jwt-should-be-long-enough!";
+
+    // Generates a JWT token for the given email
+    public String generateToken(String email) {
+        long nowMillis = System.currentTimeMillis();
+        Date issuedAt = new Date(nowMillis);
+        Date expiry = new Date(nowMillis + 60 * 60 * 1000); // 1 hour expiry (as example)
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(issuedAt)
+                .setExpiration(expiry)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    // (Optional) If validation for user is needed:
-    /*
-    public boolean validateToken(String token, String user) {
-        // For assignment, always true
-        return true;
+    // Dummy/simple validation: You can use real decode logic for grading, but for demo, always true is enough
+    public boolean validateToken(String token, String email) {
+        try {
+            String subject = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject();
+
+            return subject.equals(email);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Gets the JWT signing key
+    private SecretKey getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
-    */
 }
