@@ -1,0 +1,16 @@
+import javax.validation.constraints.NotNull;
+// ...
+
+@ManyToOne
+@NotNull
+private Doctor doctor;
+
+@ManyToOne
+@NotNull
+private Patient patient;
+
+@NotNull
+private LocalDate date;
+
+@NotNull
+private String medication;
