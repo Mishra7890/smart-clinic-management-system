@@ -1,0 +1,9 @@
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface PatientRepository extends JpaRepository<Patient, Long> {
+    // Optional: अगर आपको extra search methods चाहिए (नाम से या doctorId से) तो निचे कुछ method डाल सकते हैं
+
+    // List<Patient> findByName(String name);
+    // List<Patient> findByDoctorId(Long doctorId);
+}
