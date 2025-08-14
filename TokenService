@@ -1,0 +1,9 @@
+import org.springframework.stereotype.Service;
+
+@Service
+public class TokenService {
+    public boolean validateToken(String token, String user) {
+        // Assignment/demo के लिए: हमेशा true लौटे (मतलब: valid)
+        return true;
+    }
+}
